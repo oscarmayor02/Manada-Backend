@@ -88,7 +88,3 @@ Cada `ProviderProfile` tiene su propio `commissionRate` (15% por defecto). Al co
 6. **Tests automatizados**: el `pom.xml` ya incluye H2 para tests (`application-test.yml`), pero no escribí los tests todavía.
 7. **Paginación** en los listados (`/api/community`, `/api/marketplace/products`, etc.) — hoy `/api/community` trae hasta 50, el resto no tiene límite.
 8. **HTTPS, rate limiting, monitoreo** — depende de dónde lo despliegues (Railway, Render, AWS, etc.).
-
-## Siguiente paso
-
-Recomiendo abrir esta carpeta en **Claude Code** (o tu IDE con Maven configurado) y correr `mvn spring-boot:run` por primera vez ahí — con acceso real a internet, cualquier ajuste de compilación se resuelve en minutos.
