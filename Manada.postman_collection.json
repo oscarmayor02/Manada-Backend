@@ -1,0 +1,1589 @@
+{
+  "info": {
+    "name": "Manada API",
+    "description": "Colección completa para probar el backend de Manada paso a paso: registro de los 3 tipos de cuenta, verificación, mascotas, SOS, adopción, marketplace, servicios, comunidad y mensajería.\n\nCómo usarla:\n1. Importa esta colección Y el environment 'Manada - Local' en Postman.\n2. Selecciona el environment 'Manada - Local' arriba a la derecha.\n3. Corre las carpetas EN ORDEN (1 a 10) — cada request guarda automáticamente los IDs/tokens que las siguientes necesitan, no tienes que copiar nada a mano.\n4. Asegúrate de tener el backend corriendo en http://localhost:8080 antes de empezar (docker compose up, o mvn spring-boot:run).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "foundationToken",
+      "value": ""
+    },
+    {
+      "key": "foundationUserId",
+      "value": ""
+    },
+    {
+      "key": "foundationId",
+      "value": ""
+    },
+    {
+      "key": "vetToken",
+      "value": ""
+    },
+    {
+      "key": "vetUserId",
+      "value": ""
+    },
+    {
+      "key": "vetProviderId",
+      "value": ""
+    },
+    {
+      "key": "tiendaToken",
+      "value": ""
+    },
+    {
+      "key": "tiendaUserId",
+      "value": ""
+    },
+    {
+      "key": "tiendaProviderId",
+      "value": ""
+    },
+    {
+      "key": "petId",
+      "value": ""
+    },
+    {
+      "key": "alertId",
+      "value": ""
+    },
+    {
+      "key": "listingId",
+      "value": ""
+    },
+    {
+      "key": "adoptionRequestId",
+      "value": ""
+    },
+    {
+      "key": "productId",
+      "value": ""
+    },
+    {
+      "key": "orderId",
+      "value": ""
+    },
+    {
+      "key": "serviceId",
+      "value": ""
+    },
+    {
+      "key": "bookingId",
+      "value": ""
+    },
+    {
+      "key": "postId",
+      "value": ""
+    },
+    {
+      "key": "conversationId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Auth — registro y login (3 tipos de cuenta)",
+      "item": [
+        {
+          "name": "Registrar Dueño (Camila)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"camila@ejemplo.com\",\n  \"password\": \"123456\",\n  \"fullName\": \"Camila Rodríguez\",\n  \"phone\": \"3001234567\",\n  \"accountType\": \"DUENO\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"token\", data.token);",
+                  "pm.collectionVariables.set(\"userId\", data.user.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login Dueño",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"camila@ejemplo.com\",\n  \"password\": \"123456\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"200 ok\", () => pm.response.to.have.status(200));",
+                  "pm.collectionVariables.set(\"token\", data.token);",
+                  "pm.collectionVariables.set(\"userId\", data.user.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Ver mi perfil (me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Registrar Fundación (Huellitas)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"contacto@huellitas.org\",\n  \"password\": \"123456\",\n  \"fullName\": \"Fundación Huellitas\",\n  \"accountType\": \"FUNDACION\",\n  \"foundation\": {\n    \"orgName\": \"Fundación Huellitas\",\n    \"taxId\": \"900123456-1\",\n    \"city\": \"Bogotá\"\n  }\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"foundationToken\", data.token);",
+                  "pm.collectionVariables.set(\"foundationUserId\", data.user.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Registrar Proveedor - Veterinaria",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"contacto@vetsanroque.com\",\n  \"password\": \"123456\",\n  \"fullName\": \"Veterinaria San Roque\",\n  \"accountType\": \"PROVEEDOR\",\n  \"provider\": {\n    \"providerType\": \"VETERINARIA\",\n    \"businessName\": \"Veterinaria San Roque\",\n    \"city\": \"Bogotá\"\n  }\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"vetToken\", data.token);",
+                  "pm.collectionVariables.set(\"vetUserId\", data.user.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Registrar Proveedor - Tienda",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ventas@petshopnorte.com\",\n  \"password\": \"123456\",\n  \"fullName\": \"Pet Shop Norte\",\n  \"accountType\": \"PROVEEDOR\",\n  \"provider\": {\n    \"providerType\": \"TIENDA\",\n    \"businessName\": \"Pet Shop Norte\",\n    \"city\": \"Bogotá\"\n  }\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"tiendaToken\", data.token);",
+                  "pm.collectionVariables.set(\"tiendaUserId\", data.user.id);"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "2. Verificación (simula el rol admin)",
+      "item": [
+        {
+          "name": "Ver mi perfil de fundación",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{foundationToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/foundations/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "foundations",
+                "me"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set(\"foundationId\", data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verificar fundación (aprobar)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{foundationToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/foundations/{{foundationId}}/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "foundations",
+                "{{foundationId}}",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"VERIFICADO\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver mi perfil de proveedor (vet)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{vetToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/providers/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "providers",
+                "me"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set(\"vetProviderId\", data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verificar veterinaria (aprobar)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{vetToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/providers/{{vetProviderId}}/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "providers",
+                "{{vetProviderId}}",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"VERIFICADO\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver mi perfil de proveedor (tienda)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tiendaToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/providers/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "providers",
+                "me"
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set(\"tiendaProviderId\", data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verificar tienda (aprobar)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tiendaToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/providers/{{tiendaProviderId}}/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "providers",
+                "{{tiendaProviderId}}",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"VERIFICADO\"\n}"
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "En producción esto lo haría un administrador real. Aquí cada cuenta se auto-verifica para poder seguir probando el resto del flujo."
+    },
+    {
+      "name": "3. Mascotas",
+      "item": [
+        {
+          "name": "Crear mascota (Toby)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pets"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Toby\",\n  \"species\": \"PERRO\",\n  \"sex\": \"MACHO\",\n  \"size\": \"GRANDE\",\n  \"breed\": \"Labrador\",\n  \"birthYear\": 2021\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"petId\", data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar mis mascotas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pets"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener una mascota",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pets/{{petId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pets",
+                "{{petId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar mascota",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pets/{{petId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pets",
+                "{{petId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Toby\",\n  \"species\": \"PERRO\",\n  \"sex\": \"MACHO\",\n  \"size\": \"GRANDE\",\n  \"breed\": \"Labrador retriever\",\n  \"birthYear\": 2021\n}"
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "4. SOS — mascota perdida",
+      "item": [
+        {
+          "name": "Publicar alerta SOS (Toby perdido)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"petId\": \"{{petId}}\",\n  \"lastSeenAddress\": \"Chapinero, Bogotá\",\n  \"locality\": \"Chapinero\",\n  \"radiusKm\": 2,\n  \"contactPhone\": \"3001234567\",\n  \"notes\": \"Es muy asustadizo\",\n  \"notifyPush\": true,\n  \"notifyEmail\": true\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"alertId\", data.alert.id);",
+                  "pm.test(\"estima personas notificadas\", () => pm.expect(data.notified).to.be.a(\"number\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar alertas activas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reportar avistamiento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{foundationToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sos/{{alertId}}/sightings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sos",
+                "{{alertId}}",
+                "sightings"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"note\": \"Lo vi cerca del parque hace 5 minutos\",\n  \"latitude\": 4.65,\n  \"longitude\": -74.05\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Resolver alerta (dueño la recuperó)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sos/{{alertId}}/resolve",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sos",
+                "{{alertId}}",
+                "resolve"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "5. Adopción",
+      "item": [
+        {
+          "name": "Publicar animal en adopción (Luna)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{foundationToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/adoption",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "adoption"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Luna\",\n  \"species\": \"GATO\",\n  \"sex\": \"HEMBRA\",\n  \"size\": \"PEQUENO\",\n  \"ageLabel\": \"2 años\",\n  \"description\": \"Gata mestiza muy cariñosa\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"listingId\", data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar publicaciones de adopción",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/adoption",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "adoption"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Solicitar adopción de Luna",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/adoption/{{listingId}}/requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "adoption",
+                "{{listingId}}",
+                "requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Tengo experiencia con gatos y un apartamento tranquilo.\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"adoptionRequestId\", data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aprobar solicitud de adopción",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{foundationToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/adoption/requests/{{adoptionRequestId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "adoption",
+                "requests",
+                "{{adoptionRequestId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APROBADA\"\n}"
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "6. Marketplace",
+      "item": [
+        {
+          "name": "Crear producto (Concentrado)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tiendaToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/marketplace/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "marketplace",
+                "products"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Concentrado premium 10kg\",\n  \"category\": \"ALIMENTO\",\n  \"price\": 120000,\n  \"stock\": 25\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"productId\", data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar productos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/marketplace/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "marketplace",
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comprar (checkout con comisión automática)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/marketplace/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "marketplace",
+                "orders"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 2\n    }\n  ]\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"orderId\", data.id);",
+                  "pm.test(\"comisión calculada\", () => pm.expect(parseFloat(data.commissionAmt)).to.be.above(0));"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "7. Servicios y reservas",
+      "item": [
+        {
+          "name": "Crear servicio (Vacunación)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{vetToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/services",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "services"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serviceType\": \"VACUNACION\",\n  \"name\": \"Vacunación anual\",\n  \"price\": 80000,\n  \"durationMin\": 30\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"serviceId\", data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar servicios",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/services",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "services"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reservar cita",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/services/bookings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "services",
+                "bookings"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serviceId\": \"{{serviceId}}\",\n  \"scheduledAt\": \"2026-09-01T15:00:00Z\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"bookingId\", data.id);"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "8. Comunidad",
+      "item": [
+        {
+          "name": "Crear publicación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/community",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "community"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"HISTORIA\",\n  \"caption\": \"Toby ya está en casa, gracias a todos por ayudar a buscarlo 🐾\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"postId\", data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar publicaciones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/community",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "community"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Dar like a una publicación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{foundationToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/community/{{postId}}/like",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "community",
+                "{{postId}}",
+                "like"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comentar una publicación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{foundationToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/community/{{postId}}/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "community",
+                "{{postId}}",
+                "comments"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"¡Qué alegría! 🎉\"\n}"
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "9. Mensajería",
+      "item": [
+        {
+          "name": "Iniciar conversación (con la fundación)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/messages/conversations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "messages",
+                "conversations"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otherUserId\": \"{{foundationUserId}}\",\n  \"contextType\": \"adopcion\",\n  \"contextRef\": \"Luna · Adopción\",\n  \"firstMessage\": \"Hola! Quería preguntar por Luna, ¿sigue disponible?\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.test(\"201 creado\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"conversationId\", data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar mis conversaciones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/messages/conversations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "messages",
+                "conversations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver mensajes de la conversación",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/messages/conversations/{{conversationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "messages",
+                "conversations",
+                "{{conversationId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Responder (como fundación)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{foundationToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/messages/conversations/{{conversationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "messages",
+                "conversations",
+                "{{conversationId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"¡Sí! Puedes visitarla este sábado de 9am a 1pm.\"\n}"
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "10. Proveedores, notificaciones y salud",
+      "item": [
+        {
+          "name": "Directorio de veterinarias verificadas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/providers?type=VETERINARIA",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "providers"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "VETERINARIA"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mis notificaciones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "notifications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    }
+  ]
+}
